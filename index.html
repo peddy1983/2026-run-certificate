@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 New Year Run 完賽證明合成</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", "Arial", sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #2c3e50;
+            color: #333;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        h2 { color: #e67e22; margin-bottom: 20px; }
+        
+        .input-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        button:hover { background-color: #d35400; }
+        
+        /* 結果顯示區 */
+        #resultArea { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; display: none; }
+        
+        #previewImage {
+            max-width: 100%;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+            display: none; /* 預設隱藏 */
+        }
+
+        /* 這是備用的 Canvas 顯示區 */
+        #certificateCanvas {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            display: none; /* 預設隱藏 */
+            margin: 0 auto;
+        }
+
+        .download-btn {
+            display: none; /* 預設隱藏 */
+            text-decoration: none;
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        
+        .loading { color: #888; display: none; margin-top: 10px;}
+        .error-msg { color: red; margin-top: 10px; display: none; }
+        .tips { font-size: 14px; color: #666; margin-top: 10px; display: none; text-align: left; background: #fff3cd; padding: 10px; border-radius: 5px;}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🏃 2026 完賽證明合成</h2>
+    
+    <div class="input-group">
+        <label>選擇組別 (Category)：</label>
+        <select id="raceCategory">
+            <option value="5k">5K 組 (5 Kilometers)</option>
+            <option value="10k">10K 組 (10 Kilometers)</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>選手姓名 (Name)：</label>
+        <input type="text" id="runnerName" placeholder="例如：CHEN, DA-MING" value="Chen, Da-Ming">
+    </div>
+
+    <div class="input-group">
+        <label>完賽時間 (Time)：</label>
+        <input type="text" id="runnerTime" placeholder="例如：00:57:00" value="00:57:00">
+    </div>
+
+    <button onclick="generateCertificate()">製作我的證書</button>
+    <p class="loading" id="loadingMsg">圖片生成中...</p>
+    <p class="error-msg" id="errorMsg"></p>
+
+    <div id="resultArea">
+        <h3>✨ 您的證書</h3>
+        
+        <img id="previewImage" alt="證書預覽">
+        
+        <canvas id="certificateCanvas"></canvas>
+        
+        <a id="downloadLink" class="download-btn" href="#">下載證書 (Download)</a>
+        
+        <div id="saveTips" class="tips">
+            ⚠️ <b>提示：</b><br>
+            若無法點擊下載，請直接對著上方的圖片<br>
+            <b>按滑鼠右鍵 -> 另存圖片</b> 即可保存！
+        </div>
+    </div>
+</div>
+
+<script>
+    function generateCertificate() {
+        const category = document.getElementById('raceCategory').value;
+        const name = document.getElementById('runnerName').value;
+        const time = document.getElementById('runnerTime').value;
+        
+        const loadingMsg = document.getElementById('loadingMsg');
+        const errorMsg = document.getElementById('errorMsg');
+        const resultArea = document.getElementById('resultArea');
+        const previewImg = document.getElementById('previewImage');
+        const downloadLink = document.getElementById('downloadLink');
+        const canvas = document.getElementById('certificateCanvas');
+        const saveTips = document.getElementById('saveTips');
+
+        if (!name || !time) {
+            alert("請完整輸入姓名與時間！");
+            return;
+        }
+
+        // 重置介面
+        loadingMsg.style.display = 'block';
+        errorMsg.style.display = 'none';
+        resultArea.style.display = 'none';
+        previewImg.style.display = 'none';
+        canvas.style.display = 'none';
+        downloadLink.style.display = 'none';
+        saveTips.style.display = 'none';
+
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+
+        // -----------------------------------------------------
+        // 設定圖片路徑 (對應你資料夾內的檔名)
+        // -----------------------------------------------------
+        if (category === '5k') {
+            img.src = 'bg_5k.jpg';   
+        } else {
+            img.src = 'bg_10k.jpg';  
+        }
+
+        img.onload = function() {
+            // 1. 設定畫布尺寸
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            // 2. 畫底圖
+            ctx.drawImage(img, 0, 0);
+
+            // 3. 設定文字參數
+            const centerX = canvas.width / 2;
+
+            // --- 繪製姓名 (深藍色, 粗體) ---
+            ctx.font = 'bold 80px "Microsoft JhengHei", "Arial Black"';
+            ctx.fillStyle = '#1a2b49'; 
+            ctx.textAlign = 'center';
+            // 原本是 0.72，改成 0.74 讓它往下移一點
+            ctx.fillText(name.toUpperCase(), centerX, canvas.height * 0.74); 
+
+            // --- 繪製時間 (Impact 字體, 深藍色) ---
+            ctx.font = 'bold 70px "Impact", "Arial Narrow", sans-serif';
+            ctx.fillStyle = '#1a2b49';
+            // 原本是 0.82，改成 0.835 讓它往下移到絲帶中間
+            ctx.fillText(time, centerX, canvas.height * 0.835);
+
+            loadingMsg.style.display = 'none';
+            resultArea.style.display = 'block';
+
+            // 4. 嘗試產生圖片下載連結
+            try {
+                // 嘗試將 Canvas 轉為圖片網址
+                const dataURL = canvas.toDataURL('image/jpeg', 0.9);
+                
+                // 成功：顯示圖片標籤
+                previewImg.src = dataURL;
+                previewImg.style.display = 'block';
+                
+                // 設定下載按鈕
+                downloadLink.href = dataURL;
+                downloadLink.download = `Certificate_${name}.jpg`;
+                downloadLink.style.display = 'inline-block';
+                
+            } catch (e) {
+                // ★★★ 如果報錯 (通常是本機安全性限制)，執行這裡 ★★★
+                console.log("本機模式：切換為 Canvas 直接顯示");
+                
+                // 顯示原始畫布
+                canvas.style.display = 'block';
+                // 顯示提示文字
+                saveTips.style.display = 'block';
+            }
+        };
+
+        img.onerror = function() {
+            loadingMsg.style.display = 'none';
+            errorMsg.innerText = "❌ 找不到底圖檔案！請確認資料夾內是否有 bg_5k.jpg 和 bg_10k.jpg";
+            errorMsg.style.display = 'block';
+        };
+    }
+</script>
+
+</body>
+</html>

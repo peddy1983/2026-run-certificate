@@ -167,7 +167,7 @@
         const img = new Image();
 
         // -----------------------------------------------------
-        // 參數設定區 (字體大小 +10pt)
+        // 參數設定區 (字體再加大 & 位置再微調)
         // -----------------------------------------------------
         let textColor = '#1a2b49'; 
         let nameYRatio = 0.733;
@@ -181,13 +181,15 @@
             
             textColor = '#edc776'; // 金色
             
-            // 位置 (維持上次調整的完美位置)
-            nameYRatio = 0.76; 
-            timeYRatio = 0.81; 
+            // 位置調整：
+            // 姓名再往上 (0.76 -> 0.745)
+            nameYRatio = 0.745; 
+            // 時間再往下 (0.81 -> 0.835)
+            timeYRatio = 0.835; 
 
-            // 字體加大 (+10pt)：
-            nameFont = "bold 70pt 'Microsoft JhengHei', 'Arial Black'"; // 60 -> 70
-            timeFont = "bold 65pt 'Impact', 'Arial Narrow'"; // 55 -> 65
+            // 字體維持大尺寸：
+            nameFont = "bold 70pt 'Microsoft JhengHei', 'Arial Black'"; 
+            timeFont = "bold 65pt 'Impact', 'Arial Narrow'"; 
 
         } else {
             // === 經典原版 (Original) ===
@@ -195,13 +197,13 @@
             
             textColor = '#1a2b49'; // 深藍
             
-            // 位置 (維持上次調整的完美位置)
+            // 位置維持不變 (置中)
             nameYRatio = 0.725; 
             timeYRatio = 0.814; 
             
-            // 字體加大 (+10pt)：
-            nameFont = "bold 50pt 'Microsoft JhengHei', 'Arial Black'"; // 40 -> 50
-            timeFont = "bold 44pt 'Impact', 'Arial Narrow'"; // 34 -> 44
+            // 字體大幅升級 (有感變大)：
+            nameFont = "bold 80pt 'Microsoft JhengHei', 'Arial Black'"; // 50 -> 80
+            timeFont = "bold 70pt 'Impact', 'Arial Narrow'"; // 44 -> 70
         }
 
         img.onload = function() {

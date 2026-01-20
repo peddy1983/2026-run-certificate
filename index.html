@@ -167,13 +167,13 @@
         const img = new Image();
 
         // -----------------------------------------------------
-        // 設定變數：根據您的設計圖座標 (mm) 換算
+        // 參數設定區 (字體大小與位置)
         // -----------------------------------------------------
         let textColor = '#1a2b49'; 
         let nameYRatio = 0.733;
         let timeYRatio = 0.814;
-        let nameFont = "bold 40pt 'Microsoft JhengHei', 'Arial Black'";
-        let timeFont = "bold 34pt 'Impact', 'Arial Narrow'";
+        let nameFont = "";
+        let timeFont = "";
 
         if (style === 'cny') {
             // === 新春賀歲版 (CNY) ===
@@ -181,13 +181,17 @@
             
             textColor = '#edc776'; // 金色
             
-            // 根據圖3 與 圖4 座標換算
-            nameYRatio = 0.728; // Y: 216.2mm
-            timeYRatio = 0.817; // Y: 242.6mm
+            // 位置調整：
+            // 姓名往下一點 (0.728 -> 0.76)
+            nameYRatio = 0.76; 
+            // 時間往上一點 (0.817 -> 0.81)
+            timeYRatio = 0.81; 
 
-            // 字體大小：名字40pt, 時間40pt
-            nameFont = "bold 40pt 'Microsoft JhengHei', 'Arial Black'"; 
-            timeFont = "bold 40pt 'Impact', 'Arial Narrow'"; 
+            // 字體加大：
+            // 姓名加大到 60pt
+            nameFont = "bold 60pt 'Microsoft JhengHei', 'Arial Black'"; 
+            // 時間加大到 55pt
+            timeFont = "bold 55pt 'Impact', 'Arial Narrow'"; 
 
         } else {
             // === 經典原版 (Original) ===
@@ -195,11 +199,13 @@
             
             textColor = '#1a2b49'; // 深藍
             
-            // 根據圖1 與 圖2 座標換算
-            nameYRatio = 0.733; // Y: 217.7mm
-            timeYRatio = 0.814; // Y: 241.8mm
+            // 位置調整：
+            // 姓名往上 2pt (0.733 -> 0.725)
+            nameYRatio = 0.725; 
+            // 時間維持原樣
+            timeYRatio = 0.814; 
             
-            // 字體大小：名字40pt, 時間34pt
+            // 字體維持原樣：
             nameFont = "bold 40pt 'Microsoft JhengHei', 'Arial Black'";
             timeFont = "bold 34pt 'Impact', 'Arial Narrow'"; 
         }

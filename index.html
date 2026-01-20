@@ -167,7 +167,7 @@
         const img = new Image();
 
         // -----------------------------------------------------
-        // 參數設定區 (字體大小與位置)
+        // 參數設定區 (字體大小 +10pt)
         // -----------------------------------------------------
         let textColor = '#1a2b49'; 
         let nameYRatio = 0.733;
@@ -181,17 +181,13 @@
             
             textColor = '#edc776'; // 金色
             
-            // 位置調整：
-            // 姓名往下一點 (0.728 -> 0.76)
+            // 位置 (維持上次調整的完美位置)
             nameYRatio = 0.76; 
-            // 時間往上一點 (0.817 -> 0.81)
             timeYRatio = 0.81; 
 
-            // 字體加大：
-            // 姓名加大到 60pt
-            nameFont = "bold 60pt 'Microsoft JhengHei', 'Arial Black'"; 
-            // 時間加大到 55pt
-            timeFont = "bold 55pt 'Impact', 'Arial Narrow'"; 
+            // 字體加大 (+10pt)：
+            nameFont = "bold 70pt 'Microsoft JhengHei', 'Arial Black'"; // 60 -> 70
+            timeFont = "bold 65pt 'Impact', 'Arial Narrow'"; // 55 -> 65
 
         } else {
             // === 經典原版 (Original) ===
@@ -199,15 +195,13 @@
             
             textColor = '#1a2b49'; // 深藍
             
-            // 位置調整：
-            // 姓名往上 2pt (0.733 -> 0.725)
+            // 位置 (維持上次調整的完美位置)
             nameYRatio = 0.725; 
-            // 時間維持原樣
             timeYRatio = 0.814; 
             
-            // 字體維持原樣：
-            nameFont = "bold 40pt 'Microsoft JhengHei', 'Arial Black'";
-            timeFont = "bold 34pt 'Impact', 'Arial Narrow'"; 
+            // 字體加大 (+10pt)：
+            nameFont = "bold 50pt 'Microsoft JhengHei', 'Arial Black'"; // 40 -> 50
+            timeFont = "bold 44pt 'Impact', 'Arial Narrow'"; // 34 -> 44
         }
 
         img.onload = function() {

@@ -167,47 +167,41 @@
         const img = new Image();
 
         // -----------------------------------------------------
-        // 設定變數
+        // 設定變數：根據您的設計圖座標 (mm) 換算
         // -----------------------------------------------------
         let textColor = '#1a2b49'; 
-        let nameYRatio = 0.72;
-        let timeYRatio = 0.82;
-        let nameFont = "bold 80px 'Microsoft JhengHei'";
-        let timeFont = "bold 70px 'Impact'";
+        let nameYRatio = 0.733;
+        let timeYRatio = 0.814;
+        let nameFont = "bold 40pt 'Microsoft JhengHei', 'Arial Black'";
+        let timeFont = "bold 34pt 'Impact', 'Arial Narrow'";
 
         if (style === 'cny') {
             // === 新春賀歲版 (CNY) ===
             img.src = (category === '5k') ? 'bg_5k_cny.jpg' : 'bg_10k_cny.jpg';
             
-            // 顏色：金色
-            textColor = '#edc776'; 
+            textColor = '#edc776'; // 金色
             
-            // 位置調整 (對應沙丘區與匾額區)
-            // 名字：在上方文字與匾額中間 (沙丘區)
-            nameYRatio = 0.71;    
-            // 時間：在紅色匾額正中間
-            timeYRatio = 0.83;    
+            // 根據圖3 與 圖4 座標換算
+            nameYRatio = 0.728; // Y: 216.2mm
+            timeYRatio = 0.817; // Y: 242.6mm
 
-            // 字體大小 (您指定的 pt)
-            nameFont = "bold 45pt 'Microsoft JhengHei', 'Arial Black'"; 
+            // 字體大小：名字40pt, 時間40pt
+            nameFont = "bold 40pt 'Microsoft JhengHei', 'Arial Black'"; 
             timeFont = "bold 40pt 'Impact', 'Arial Narrow'"; 
 
         } else {
             // === 經典原版 (Original) ===
             img.src = (category === '5k') ? 'bg_5k.jpg' : 'bg_10k.jpg';
             
-            // 顏色：深藍
-            textColor = '#1a2b49';
+            textColor = '#1a2b49'; // 深藍
             
-            // 位置調整 (垂直置中優化)
-            // 名字：往下移，置中於白色區塊
-            nameYRatio = 0.74; 
-            // 時間：置中於橘色絲帶
-            timeYRatio = 0.84; 
+            // 根據圖1 與 圖2 座標換算
+            nameYRatio = 0.733; // Y: 217.7mm
+            timeYRatio = 0.814; // Y: 241.8mm
             
-            // 字體大小 (時間加大)
-            nameFont = "bold 80px 'Microsoft JhengHei', 'Arial Black'";
-            timeFont = "bold 90px 'Impact', 'Arial Narrow'"; // 加大到 90px
+            // 字體大小：名字40pt, 時間34pt
+            nameFont = "bold 40pt 'Microsoft JhengHei', 'Arial Black'";
+            timeFont = "bold 34pt 'Impact', 'Arial Narrow'"; 
         }
 
         img.onload = function() {
@@ -217,8 +211,7 @@
 
             const centerX = canvas.width / 2;
 
-            // ★★★ 關鍵設定：設定文字垂直對齊中心 ★★★
-            // 這樣設定後，座標就會是文字的「正中間」，不會偏上或偏下
+            // 設定文字垂直對齊中心 (Middle)
             ctx.textBaseline = 'middle';
             ctx.textAlign = 'center';
 

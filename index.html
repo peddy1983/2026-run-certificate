@@ -170,22 +170,26 @@
         // 參數設定區
         // -----------------------------------------------------
         let textColor = '#1a2b49'; 
-        let nameYRatio = 0.733;
+        let nameYRatio = 0.725;
         let timeYRatio = 0.814;
         let nameFont = "";
         let timeFont = "";
+        // 新增：名字陰影顏色
+        let nameShadowColor = "transparent"; 
 
         if (style === 'cny') {
             // === 新春賀歲版 (CNY) ===
             img.src = (category === '5k') ? 'bg_5k_cny.jpg' : 'bg_10k_cny.jpg';
             
             textColor = '#edc776'; // 金色
+            // 設定陰影顏色為深褐色，增加立體感
+            nameShadowColor = "#5a3a22"; 
             
-            // 位置調整 (往上移)：
-            // 姓名：完全拉出紅框，放在沙丘區 (0.745 -> 0.71)
-            nameYRatio = 0.71; 
-            // 時間：稍微往上提，對齊紅框中心 (0.835 -> 0.82)
-            timeYRatio = 0.82; 
+            // 位置調整：
+            // 姓名：稍微往下移一點點 (0.73 -> 0.735)
+            nameYRatio = 0.735; 
+            // 時間：維持不變
+            timeYRatio = 0.815; 
 
             // 字體維持大尺寸：
             nameFont = "bold 70pt 'Microsoft JhengHei', 'Arial Black'"; 
@@ -193,10 +197,10 @@
 
         } else {
             // === 經典原版 (Original) ===
-            // 維持上一版設定
             img.src = (category === '5k') ? 'bg_5k.jpg' : 'bg_10k.jpg';
             
             textColor = '#1a2b49'; // 深藍
+            nameShadowColor = "transparent"; // 不加陰影
             
             // 位置不變
             nameYRatio = 0.725; 
@@ -218,12 +222,22 @@
             ctx.textBaseline = 'middle';
             ctx.textAlign = 'center';
 
-            // --- 繪製姓名 ---
+            // --- 繪製姓名 (加入陰影效果) ---
             ctx.font = nameFont;
-            ctx.fillStyle = textColor; 
+            ctx.fillStyle = textColor;
+            
+            // 設定陰影參數
+            ctx.shadowColor = nameShadowColor;
+            ctx.shadowBlur = 5;  // 模糊程度
+            ctx.shadowOffsetX = 3; // X軸偏移
+            ctx.shadowOffsetY = 3; // Y軸偏移
+
             ctx.fillText(name.toUpperCase(), centerX, canvas.height * nameYRatio); 
 
-            // --- 繪製時間 ---
+            // --- 繪製時間 (移除陰影) ---
+            // 在繪製時間前，先把陰影關掉
+            ctx.shadowColor = "transparent"; 
+            
             ctx.font = timeFont;
             ctx.fillStyle = textColor; 
             ctx.fillText(time, centerX, canvas.height * timeYRatio);

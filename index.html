@@ -52,7 +52,6 @@
         }
         button:hover { background-color: #d35400; }
         
-        /* 結果顯示區 */
         #resultArea { margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; display: none; }
         
         #previewImage {
@@ -139,7 +138,7 @@
 <script>
     function generateCertificate() {
         const category = document.getElementById('raceCategory').value;
-        const style = document.getElementById('certificateStyle').value; // 取得風格
+        const style = document.getElementById('certificateStyle').value; 
         const name = document.getElementById('runnerName').value;
         const time = document.getElementById('runnerTime').value;
         
@@ -156,7 +155,6 @@
             return;
         }
 
-        // 重置介面
         loadingMsg.style.display = 'block';
         errorMsg.style.display = 'none';
         resultArea.style.display = 'none';
@@ -169,32 +167,48 @@
         const img = new Image();
 
         // -----------------------------------------------------
-        // 核心邏輯：根據「組別」和「風格」決定圖片與文字樣式
+        // 設定變數：顏色、位置、字體大小
         // -----------------------------------------------------
-        let textColor = '#1a2b49'; // 預設文字顏色 (深藍)
-        let nameYRatio = 0.72;     // 預設姓名垂直位置 (72%)
-        let timeYRatio = 0.82;     // 預設時間垂直位置 (82%)
+        let textColor = '#1a2b49'; 
+        let nameYRatio = 0.72;
+        let timeYRatio = 0.82;
+        // 新增字體大小變數
+        let nameFontSize = "80px";
+        let timeFontSize = "70px";
 
         if (style === 'cny') {
-            // --- 新春賀歲版 ---
+            // === 新春賀歲版 ===
             if (category === '5k') {
                 img.src = 'bg_5k_cny.jpg';
             } else {
                 img.src = 'bg_10k_cny.jpg';
             }
-            // 調整樣式以配合紅色背景和匾額
-            textColor = '#f1c40f'; // 改成金色
-            nameYRatio = 0.805;    // 移到匾額上半部
-            timeYRatio = 0.875;    // 移到匾額下半部
+            
+            // 1. 修改顏色 (金色)
+            textColor = '#edc776'; 
+            
+            // 2. 修改位置 (把字拉進紅色匾額內)
+            // 匾額大約在 78% ~ 88% 的位置
+            nameYRatio = 0.81;    // 姓名放在匾額上半部 (原本 0.805)
+            timeYRatio = 0.86;    // 時間往上拉，放在匾額下半部 (原本 0.875 太低了)
+
+            // 3. 縮小字體 (因為紅色匾額比較扁，字太大會擠在一起)
+            nameFontSize = "50px"; 
+            timeFontSize = "50px"; 
 
         } else {
-            // --- 經典原版 ---
+            // === 經典原版 ===
             if (category === '5k') {
                 img.src = 'bg_5k.jpg';
             } else {
                 img.src = 'bg_10k.jpg';
             }
-            // 使用預設樣式 (深藍色, 原本位置)
+            // 維持原版設定
+            textColor = '#1a2b49';
+            nameYRatio = 0.72; 
+            timeYRatio = 0.82; 
+            nameFontSize = "80px";
+            timeFontSize = "70px";
         }
 
         img.onload = function() {
@@ -205,14 +219,16 @@
             const centerX = canvas.width / 2;
 
             // --- 繪製姓名 ---
-            ctx.font = 'bold 80px "Microsoft JhengHei", "Arial Black"';
-            ctx.fillStyle = textColor; // 使用動態決定的顏色
+            // 使用變數來設定字體大小
+            ctx.font = `bold ${nameFontSize} "Microsoft JhengHei", "Arial Black"`;
+            ctx.fillStyle = textColor; 
             ctx.textAlign = 'center';
             ctx.fillText(name.toUpperCase(), centerX, canvas.height * nameYRatio); 
 
             // --- 繪製時間 ---
-            ctx.font = 'bold 70px "Impact", "Arial Narrow", sans-serif';
-            ctx.fillStyle = textColor; // 使用動態決定的顏色
+            // 使用變數來設定字體大小
+            ctx.font = `bold ${timeFontSize} "Impact", "Arial Narrow", sans-serif`;
+            ctx.fillStyle = textColor; 
             ctx.fillText(time, centerX, canvas.height * timeYRatio);
 
             loadingMsg.style.display = 'none';
@@ -223,7 +239,7 @@
                 previewImg.src = dataURL;
                 previewImg.style.display = 'block';
                 downloadLink.href = dataURL;
-                downloadLink.download = `Certificate_${style}_${name}.jpg`; // 檔名加入風格
+                downloadLink.download = `Certificate_${style}_${name}.jpg`;
                 downloadLink.style.display = 'inline-block';
             } catch (e) {
                 console.log("本機模式：切換為 Canvas 直接顯示");
@@ -234,7 +250,6 @@
 
         img.onerror = function() {
             loadingMsg.style.display = 'none';
-            // 顯示更詳細的錯誤訊息
             let missingFile = (style === 'cny') ? `bg_${category}_cny.jpg` : `bg_${category}.jpg`;
             errorMsg.innerHTML = `❌ 找不到底圖檔案！<br>請確認資料夾內是否有 <b>${missingFile}</b>`;
             errorMsg.style.display = 'block';
